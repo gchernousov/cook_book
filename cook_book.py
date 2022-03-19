@@ -1,7 +1,7 @@
 # Функции
 
 def get_info_cook_book(file_name):
-    """Функция для октрытия и чтения файла для формированием словаря рецептов
+    """Функция открытия и чтения файла для формирования словаря рецептов
     """
     with open(file_name, encoding='utf-8') as cook_book:
         number_of_dishes = 1
@@ -11,10 +11,7 @@ def get_info_cook_book(file_name):
         count = 0
         while read_file == True:
             dish = cook_book.readline().strip()
-            n = cook_book.readline()
-            # Я честно так и не понял, как реализовать последующий вывод ингредиентов через их количество (n)
-            # Строчку с readline() оставил, чтоб далее уже пошел цикл с информацией об ингредиентах
-            # Буду рад, если подскажите и поясните этот момент :)
+            cook_book.readline()
             list_of_ingredients = []
             for line in cook_book:
                 if line == '\n':
@@ -35,26 +32,16 @@ def get_info_cook_book(file_name):
 def show_cook_book(file_name):
     """Функция для вывода словаря рецептов
     """
-    print('COOK BOOK:\n')
+    print('КНИГА РЕЦЕПТОВ:\n')
     for key, value in get_info_cook_book(file_name).items():
         print(f"{key}:")
         for v in value:
             print(f"\t\t{v['ingredient_name']} - {v['quantity']} {v['measure']}")
         print()
 
-# def generate_ingredients_data(dish_name, person_count):
-#     if dish_name in get_info_cook_book('recipes.txt').keys():
-#         result_dict = {} # потом убрать
-#         for ingredient_info in get_info_cook_book('recipes.txt')[dish_name]:
-#             result_dict[ingredient_info['ingredient_name']] = {'measure': ingredient_info['measure'],
-#                                                                'quantity': ingredient_info['quantity'] * person_count}
-#         print(f'\nДля приготовления {dish_name} на {person_count} персон(ы) Вам потребуется:\n')
-#         for key, value in result_dict.items():
-#             print(f'{key}: {value["quantity"]} {value["measure"]}')
-#     else:
-#         print(f'\nИзвините, но в книге нет рецепта для {dish_name}')
-
 def get_shop_list_by_dishes(dishes, person_count):
+    """Функция для вывода ингредиентов и их количества, необходимых для приготовления блюда
+    """
     result_dict = {}
     current_q = 0
     if type(dishes) == list or type(dishes) == tuple:
@@ -79,7 +66,7 @@ def get_shop_list_by_dishes(dishes, person_count):
             for key, value in result_dict.items():
                 print(f'{key}: {value["quantity"] * person_count} {value["measure"]}')
     else:
-        print('НЕПРАВИЛЬНЫЙ ВВОД')
+        print('Неправильный ввод!')
 
 
 # Основной код
@@ -88,21 +75,21 @@ def get_shop_list_by_dishes(dishes, person_count):
 show_cook_book('recipes.txt')
 
 # Вывод необходимых ингредиентов и их количества:
-print('\n>>> Заказ одного блюда:')
+print('\n>>> Заказ одного блюда (Утка по-пекински):')
 get_shop_list_by_dishes('Утка по-пекински', 2)
 
-print('\n>>> Заказ списка блюд:') # Также реализована возможность заказа кортежа блюд
+print('\n>>> Заказ списка блюд (Запеченный картофель, Омлет):') # Также реализована возможность заказа кортежа блюд
 get_shop_list_by_dishes(['Запеченный картофель', 'Омлет'], 2)
 
-print('\n>>> Заказ списка блюд, среди которых есть те, которых нет в книге рецептов:')
+print('\n>>> Заказ списка блюд, среди которых есть те, которых нет в книге рецептов (Борщ, Омлет, Цезарь):')
 get_shop_list_by_dishes(['Борщ', 'Омлет', 'Цезарь'], 4)
 
-print('\n>>> Заказ двух одинаковых блюд:')
+print('\n>>> Заказ двух одинаковых блюд (Омлет, Омлет):')
 get_shop_list_by_dishes(['Омлет', 'Омлет'], 1)
 
-print('\n>>> Заказ блюд с одинаковыми ингредиентами:')
+print('\n>>> Заказ блюд с одинаковыми ингредиентами (Фахитос, Омлет):')
 get_shop_list_by_dishes(['Фахитос', 'Омлет'], 2)
 
-print('\n>>> Заказ блюд с одинаковыми блюдами и ингредиентами:')
+print('\n>>> Заказ блюд с одинаковыми блюдами и ингредиентами (Фахитос, Омлет, Омлет):')
 # Решил отработать и такой вариант и он внезапно вызвал у меня сложность, но, вроде, разобрался
 get_shop_list_by_dishes(['Фахитос', 'Омлет', 'Омлет'], 2)
